@@ -167,11 +167,11 @@ podman-compose --version
 podman run --rm hello-world
 ```
 
-### 1. Copiar el repositorio de Github XXXXX
+### 1. Copiar el repositorio de Github https://github.com/hlbarragan/proyecto-final.git
 
 ```bash
 cd /mnt/d/CursoKafka/proyecto-final
-git clone xxxxx
+git clone https://github.com/hlbarragan/proyecto-final.git
 ```
 
 ### 2. Levantar los contenedores de Podman
