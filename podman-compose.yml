@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0   # Imagen oficial de Confluent para Zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"                          # Puerto de Zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181            # Puerto por defecto de clientes
+      ZOOKEEPER_TICK_TIME: 2000              # Tiempo base de sincronización
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0       # Imagen oficial de Kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"                          # Puerto externo para clientes
+      - "29092:29092"                        # Puerto interno (para otros contenedores)
+    environment:
+      KAFKA_BROKER_ID: 1                     # Identificador único del broker
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Dirección de Zookeeper
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.24.186.249:9092,PLAINTEXT_INTERNAL://kafka:29092
+      # PLAINTEXT -> conexión externa desde tu máquina
+      # PLAINTEXT_INTERNAL -> conexión interna entre contenedores
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Número de réplicas mínimas (1 en pruebas)
+      KAFKA_CREATE_TOPICS: "eventos-pagina:1:1"  # Creación de tópico eventos-pagina topic_name:partitions:replication_factor
+    depends_on:
+      - zookeeper   # Kafka necesita que Zookeeper esté arriba primero
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest #Imagen Base de kafdrop, interfaz grafica de kafka
+    container_name: kafdrop
+    ports:
+      - "9000:9000"   # Abres en el navegador: http://localhost:9000
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+    depends_on:
+      - kafka
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: usuario_bd
+      POSTGRES_PASSWORD: contrasenia_BD
+      POSTGRES_DB: base_datos
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pg_data:

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "generador-eventos"
+		},
+		{
+			"path": "consumidor-eventos"
+		}
+	],
+	"settings": {
+		"java.dependency.packagePresentation": "hierarchical",
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}

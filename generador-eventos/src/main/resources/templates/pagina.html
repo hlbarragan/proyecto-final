@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>P&aacute;gina de eventos</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; }
+        button { padding: 0.5rem 1rem; font-size: 1rem; }
+        .message { margin-top: 1rem; color: green; }
+    </style>
+</head>
+<body>
+    <h1>P&aacute;gina de eventos</h1>
+
+    <form th:action="@{enviar-evento}" method="post">
+        <input type="hidden" name="idBoton" value="btnBoton1" />
+        <input type="hidden" name="event" value="action" />
+        <button type="submit">Bot&oacute;n 1</button>
+    </form>
+
+    <br>
+
+    <form th:action="@{enviar-evento}" method="post">
+        <input type="hidden" name="idBoton" value="btnBoton2" />
+        <input type="hidden" name="event" value="action" />
+        <button type="submit">Bot&oacute;n 2</button>
+    </form>
+
+    <br>
+
+    <form th:action="@{enviar-evento}" method="post">
+        <input type="hidden" name="idBoton" value="btnBoton3" />
+        <input type="hidden" name="event" value="action" />
+        <button type="submit">Bot&oacute;n 3</button>
+    </form>
+
+    <div class="message" th:if="${msgMensaje}" th:text="${msgMensaje}"></div>
+</body>
+</html>
